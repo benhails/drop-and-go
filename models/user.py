@@ -17,7 +17,8 @@ class User(BaseModel):
     user_type = pw.IntegerField(default=UserType.CUSTOMER.value) 
     email = pw.CharField(unique=True)
     password = pw.CharField()
-    image = pw.CharField(unique=False, null=True, default='')
+    phone_number = pw.CharField(null=True, default='')
+    image_filename = pw.CharField(unique=False, null=True, default='')
     
 
     def validate(self):
