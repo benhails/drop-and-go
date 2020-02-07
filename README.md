@@ -6,7 +6,9 @@ version 0.0.1 (alpha)
 
 **Install dependencies**
 
-- Python 3.7.2 was tested
+**SYAFIK PLEASE CHECK THIS - I DON'T THINK IT'S NEEDED NOW
+
+- Python 3.8.1 was tested
 - Postgresql 10.3 was tested
 
 1. Delete `peewee-db-evolve==3.7.0` from `requirements.txt` during the first installation.
@@ -49,6 +51,12 @@ BRAINTREE KEYS
 BT_MERCHANT_ID= #generate your own key
 BT_PUBLIC_KEY= #generate your own key
 BT_PRIVATE_KEY= #generate your own key
+
+AWS KEYS (ACTUAL KEYS NOT YET REQUIRED)
+
+S3_BUCKET_NAME= ''
+S3_ACCESS_KEY_ID= ''
+S3_SECRET_ACCESS_KEY= ''
 
 
 
