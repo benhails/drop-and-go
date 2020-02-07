@@ -1,5 +1,5 @@
 from app import app
-import instagram_api
+import drop_and_go_api
 
 if __name__ == '__main__':
     app.run()
