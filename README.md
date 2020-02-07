@@ -128,33 +128,28 @@ The entry point for a Flask server to start is located at `start.py`
 
 ## Dependencies
 
-This template was created against `Python 3.7`. Should work with newer versions of Python. Not tested with older versions.
+This code was created with `Python 3.8.1`.
 
 `Peewee` is used as ORM along with a database migration library `peewee-db-evolve`.
-
-This template also comes packaged with Bootstrap 4.1.3 and it's dependencies (jQuery).
 
 A copy of requirements.txt is included in the repository.
 
 ```
-autopep8==1.4.3
-certifi==2018.11.29
+certifi==2019.11.28
 Click==7.0
-colorama==0.4.1
-Flask==1.0.2
-Flask-Cors==3.0.7
+colorama==0.4.3
+Flask==1.1.1
+Flask-Cors==3.0.8
 itsdangerous==1.1.0
-Jinja2==2.10
-MarkupSafe==1.1.0
-peewee==3.8.2
-peewee-db-evolve==3.7.0
-psycopg2-binary==2.7.7
-pycodestyle==2.5.0
-python-dotenv==0.10.1
-six==1.12.0
-Werkzeug==0.14.1
+Jinja2==2.11.1
+MarkupSafe==1.1.1
+peewee==3.13.1
+peewee-db-evolve==3.7.3
+python-dotenv==0.10.5
+six==1.14.0
+Werkzeug==0.16.1
 ```
 
-Remove `certifi==2018.11.29` if you're having trouble installing dependencies.
+Remove `certifi==2018.11.28` if you're having trouble installing dependencies.
 
 ---
