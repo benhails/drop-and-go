@@ -36,7 +36,17 @@ def show(id):
     s = Store.get_or_none(Store.id == id)
     if s:
         return jsonify({
-            'name': s.name
+            'name': s.name,
+            'building_number': s.building_number,
+            'street_name': s.street_name,
+            'city': s.city,
+            'country': s.country,
+            'location_index': s.location_index,
+            'postal_zip_code': s.postal_zip_code,
+            'area': s.area,
+            'nearby': s.nearby,
+            'opening_hours': s.opening_hours,
+            'owner_id': s.owner_id,
         }), 200
     else:
         return jsonify({
