@@ -2,8 +2,8 @@ from flask import Blueprint, jsonify, request
 from models.store import Store
 
 stores_api_blueprint = Blueprint('stores_api',
-                             __name__,
-                             template_folder='templates')
+                                 __name__,
+                                 template_folder='templates')
 
 
 @stores_api_blueprint.route('/', methods=["POST"])
@@ -19,8 +19,7 @@ def create():
         }), 200
     else:
         # the following error doesn't actually work if it's a DB integrity error; can improve error handling here in future if required.
-        return jsonify(s.errors), 400 # bad request
-
+        return jsonify(s.errors), 400  # bad request
 
 
 # GET A SINGLE STORE (NOT SURE IF THIS ENDPOINT IS NEEDED)
@@ -33,8 +32,8 @@ def show(id):
         }), 200
     else:
         return jsonify({
-            'message': "User doesn't exist"
-        }), 418 # teapot error
+            'message': "Stores doesn't exist"
+        }), 418  # teapot error
 
 
 # GET STORES BASED ON LOCATION INDEX
@@ -50,4 +49,4 @@ def index():
     else:
         return jsonify({
             'message': "User doesn't exist"
-        }), 418 # teapot error
+        }), 418  # teapot error
