@@ -10,7 +10,15 @@ stores_api_blueprint = Blueprint('stores_api',
 def create():
     s = Store(
         name=request.json.get('name'),
-        # NEED TO ADD OTHER FIELDS HERE
+        building_number=request.json.get('building_number'),
+        street_name=request.json.get('street_name'),
+        city=request.json.get('city'),
+        country=request.json.get('country'),
+        location_index=request.json.get('location_index'),
+        postal_zip_code=request.json.get('postal_zip_code'),
+        area=request.json.get('area'),
+        nearby=request.json.get('nearby'),
+        opening_hours=request.json.get('opening_hours'),
     )
     if s.save():
         return jsonify({
