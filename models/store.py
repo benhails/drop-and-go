@@ -10,7 +10,7 @@ class Store(BaseModel):
 
     # DEFAULTS unique=False, null=False
     price = pw.IntegerField(null=True, default='')
-    star_rating = pw.IntegerField(null=True, default='')
+    star_rating = pw.IntegerField(null=True, default=5)
     operating_day = pw.CharField(null=True, default='')
     name = pw.CharField()
     building_number = pw.CharField()
