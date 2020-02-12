@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from models.store import Store
+from models.user import User
 
 stores_api_blueprint = Blueprint('stores_api',
                                  __name__,
@@ -55,16 +56,37 @@ def show(id):
 
 
 # GET STORES BASED ON LOCATION INDEX
-# EXAMPLE REQUEST URL: https://dropandgo.herokuapp.com/api/v1/stores?location=1
-@stores_api_blueprint.route('/', methods=["GET"])
-def index():
-    s = Store.select().where(Store.location_index == request.args.get('location'))
-    # WILL NEED TO LOOP THROUGH RESULTS HERE TO CREATE JSON OBJECT
-    if s:
-        return jsonify({
-            'name': s.name
-        }), 200
+# EXAMPLE REQUEST URL: https://dropandgo.herokuapp.com/api/v1/stores/?loc=1
+@stores_api_blueprint.route('/', methods=['GET'])
+def store_loc():
+
+    loc_args = request.args.get('loc')
+
+    if loc_args:
+        stores = Store.select().where(Store.location_index == loc_args)
+        if stores:
+            store_list = []
+            for store in stores:
+                store_list.append({
+                    'name': store.name,
+                    'building_number': store.building_number,
+                    'street_name': store.street_name,
+                    'city': store.city,
+                    'country': store.country,
+                    'location_index': store.location_index,
+                    'postal_zip_code': store.postal_zip_code,
+                    'area': store.area,
+                    'nearby': store.nearby,
+                    'opening_hours': store.opening_hours,
+                    'owner_id': store.owner_id,
+                })
+            return jsonify(store_list)
+
+        else:
+            return jsonify({
+                'message': "Store doesn't exist"
+            }), 418  # teapot error
     else:
         return jsonify({
-            'message': "User doesn't exist"
+            'message': "Wrong argument input"
         }), 418  # teapot error
