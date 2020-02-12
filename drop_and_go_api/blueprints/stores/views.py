@@ -84,6 +84,7 @@ def store_loc():
                     'price_per_hour': store.price,
                     'star_rating': store.star_rating,
                     'operating_day': store.operating_day,
+                    'store_image': store.store_image,
                 })
             return jsonify(store_list)
 

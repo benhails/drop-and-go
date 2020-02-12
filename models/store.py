@@ -23,6 +23,8 @@ class Store(BaseModel):
     nearby = pw.CharField(null=True, default='')
     nearby2 = pw.CharField(null=True, default='')
     opening_hours = pw.CharField(null=True, default='')
+    store_image = pw.CharField(
+        default='https://lh3.googleusercontent.com/proxy/NjslLpx0TARRoIGk9d47DNO-jCpvf_puajCcY6pxgq2tnc0xNA-VtikFEytFbDwxqa1Yur_8oRi6oSZ0-HpY8NvOVCf6kIJg9-1VGO3tftiqUyZKeztX29eVw9y3c9SGFx0')
     owner = pw.ForeignKeyField(User, backref='stores', default=1)
 
     def validate(self):
