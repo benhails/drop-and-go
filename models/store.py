@@ -19,7 +19,7 @@ class Store(BaseModel):
     area = pw.CharField(null=True, default='')
     nearby = pw.CharField(null=True, default='')
     opening_hours = pw.CharField(null=True, default='')
-    owner = pw.ForeignKeyField(User, backref='stores')
+    owner = pw.ForeignKeyField(User, backref='stores', default=1)
 
     def validate(self):
         pass
