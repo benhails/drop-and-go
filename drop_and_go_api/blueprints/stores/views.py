@@ -68,6 +68,7 @@ def store_loc():
             store_list = []
             for store in stores:
                 store_list.append({
+                    'id': store.id,
                     'name': store.name,
                     'building_number': store.building_number,
                     'street_name': store.street_name,
@@ -77,8 +78,12 @@ def store_loc():
                     'postal_zip_code': store.postal_zip_code,
                     'area': store.area,
                     'nearby': store.nearby,
+                    'nearby2': store.nearby2,
                     'opening_hours': store.opening_hours,
                     'owner_id': store.owner_id,
+                    'price_per_hour': store.price,
+                    'star_rating': store.star_rating,
+                    'operating_day': store.operating_day,
                 })
             return jsonify(store_list)
 
