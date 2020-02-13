@@ -13,8 +13,8 @@ bookings_api_blueprint = Blueprint('bookings_api',
 def create():
     # CREATE BOOKING
     b = Booking(
-        user=request.json.get('user_id'),
-        store=request.json.get('store_id'),
+        user=request.json.get('user'),
+        store=request.json.get('store'),
         check_in_date_time=request.json.get('check_in_date_time'),
         check_out_date_time=request.json.get('check_out_date_time'),
         number_of_bag=request.json.get('number_of_bag'),
