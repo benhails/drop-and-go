@@ -65,3 +65,26 @@ def show():
     # # GET BOOKING BASED ON USER ID
     # show         bookings?user_id = <id>
     #    /user/<id >
+
+
+@bookings_api_blueprint.route('/<b_id>/update/', methods=["GET"])
+def update(b_id):
+    # bookings/1/update/?status=2
+    b = Booking.get_or_none(Booking.id == b_id)
+
+    if b:
+        status_args = request.args.get('status')
+        if status_args:
+            Booking.update(status=status_args).where(Booking.id == b).execute()
+            return jsonify({
+                'message': 'Status has successfully updated'
+            })
+        else:
+            return jsonify({
+                'message': "Wrong argument input for status"
+            }), 418  # teapot error
+
+    else:
+        return jsonify({
+            "message": 'No booking id'
+        })
