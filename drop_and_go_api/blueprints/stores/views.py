@@ -19,7 +19,13 @@ def create():
         postal_zip_code=request.json.get('postal_zip_code'),
         area=request.json.get('area'),
         nearby=request.json.get('nearby'),
+        nearby2=request.json.get('nearby2'),
         opening_hours=request.json.get('opening_hours'),
+        store_image=request.json.get('store_image'),
+        owner=request.json.get('owner'),
+        price=request.json.get('price'),
+        star_rating=request.json.get('star_rating'),
+        operating_day=request.json.get('operating_day')
     )
     if s.save():
         return jsonify({
@@ -46,8 +52,13 @@ def show(id):
             'postal_zip_code': s.postal_zip_code,
             'area': s.area,
             'nearby': s.nearby,
+            'nearby2': s.nearby2,
             'opening_hours': s.opening_hours,
+            'store_image': s.store_image,
             'owner_id': s.owner_id,
+            'price': s.price,
+            'star_rating': s.star_rating,
+            'operating_day': s.operating_day
         }), 200
     else:
         return jsonify({
@@ -58,7 +69,7 @@ def show(id):
 # GET STORES BASED ON LOCATION INDEX
 # EXAMPLE REQUEST URL: https://dropandgo.herokuapp.com/api/v1/stores/?loc=1
 @stores_api_blueprint.route('/', methods=['GET'])
-def store_loc():
+def loc_show():
 
     loc_args = request.args.get('loc')
 
@@ -80,11 +91,12 @@ def store_loc():
                     'nearby': store.nearby,
                     'nearby2': store.nearby2,
                     'opening_hours': store.opening_hours,
+                    'store_image': store.store_image,
                     'owner_id': store.owner_id,
-                    'price_per_hour': store.price,
+                    'price': store.price,
                     'star_rating': store.star_rating,
                     'operating_day': store.operating_day,
-                    'store_image': store.store_image,
+                    
                 })
             return jsonify(store_list)
 
