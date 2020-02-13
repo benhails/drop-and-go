@@ -38,19 +38,24 @@ def show():
     booking_id_args = request.args.get('book_id')
 
     if user_id_args:
-        booking = Booking.get_or_none(Booking.user_id == user_id_args)
-
-        if booking:
-            return jsonify(model_to_dict(booking))
+        bookings = Booking.select().where(Booking.user_id == user_id_args)
+        if bookings:
+            booking_list = []
+            for booking in bookings:
+                booking_list.append(model_to_dict(booking))
+            return jsonify(booking_list)
         else:
             return jsonify({
                 'message': "User doesn't exist"
             }), 418  # teapot error
 
     elif booking_id_args:
-        booking = Booking.get_or_none(Booking.id == booking_id_args)
-        if booking:
-            return jsonify(model_to_dict(booking))
+        bookings = Booking.select().where(Booking.id == booking_id_args)
+        if bookings:
+            booking_list = []
+            for booking in bookings:
+                booking_list.append(model_to_dict(booking))
+            return jsonify(booking_list)
         else:
             return jsonify({
                 'message': "Booking doesn't exist"
@@ -65,3 +70,27 @@ def show():
     # # GET BOOKING BASED ON USER ID
     # show         bookings?user_id = <id>
     #    /user/<id >
+
+
+@bookings_api_blueprint.route('/<b_id>/update/', methods=["GET"])
+def update(b_id):
+    # bookings/1/update/?status=2
+    b = Booking.get_or_none(Booking.id == b_id)
+
+    if b:
+        status_args = request.args.get('status')
+        if status_args:
+            Booking.update(status=status_args).where(
+                Booking.id == b).execute()
+            return jsonify({
+                'message': 'Status has successfully updated'
+            })
+        else:
+            return jsonify({
+                'message': "Wrong argument input for status"
+            }), 418  # teapot error
+
+    else:
+        return jsonify({
+            "message": 'No booking id'
+        })
