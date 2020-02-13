@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from models.store import Store
 from models.user import User
 from models.booking import Booking
+from models.payment import Payment
 from playhouse.shortcuts import model_to_dict
 
 bookings_api_blueprint = Blueprint('bookings_api',
@@ -64,13 +65,6 @@ def show():
         'message': "Wrong argument input"
     }), 418  # teapot error
 
-    # # GET THE BOOKING BASED ON ID
-    # show            / <id >
-
-    # # GET BOOKING BASED ON USER ID
-    # show         bookings?user_id = <id>
-    #    /user/<id >
-
 
 @bookings_api_blueprint.route('/<b_id>/update/', methods=["GET"])
 def update(b_id):
@@ -94,3 +88,12 @@ def update(b_id):
         return jsonify({
             "message": 'No booking id'
         })
+
+        
+@bookings_api_blueprint.route('/<id>', methods=["GET"])
+def delete(id):
+    # work in progress; need to check and ensure this works
+    Booking.get_or_none(Booking.id == id).deleteinstance()
+    return jsonify({
+        'message': "Booking deleted"
+    }), 200
