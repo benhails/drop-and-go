@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from models.store import Store
 from models.user import User
 from models.booking import Booking
+from models.payment import Payment
 from playhouse.shortcuts import model_to_dict
 
 bookings_api_blueprint = Blueprint('bookings_api',
@@ -29,6 +30,47 @@ def create():
     else:
         # the following error doesn't actually work if it's a DB integrity error; can improve error handling here in future if required.
         return jsonify(b.errors), 400  # bad request
+
+
+@bookings_api_blueprint.route('/inc_payment', methods=["POST"])
+def create_inc_payment():
+    # CREATE BOOKING & PAYMENT SIMULTANEOUSLY
+    try:
+        user_id = request.json.get('user')
+        b = Booking(
+            user=user_id,
+            store=request.json.get('store'),
+            check_in_date_time=request.json.get('check_in_date_time'),
+            check_out_date_time=request.json.get('check_out_date_time'),
+            number_of_bag=request.json.get('number_of_bag'),
+            price=request.json.get('price'),
+            status=request.json.get('status')
+        )
+        b.save()
+
+    except:
+        return jsonify({
+                'message': "There was an error when trying to create the booking"
+            }), 400
+
+    else:
+        try:
+            p = Payment(
+                user = user_id,
+                booking = b.id,
+                trans_id = request.json.get('trans_id'),
+                currency = request.json.get('currency'),
+                amount = request.json.get('amount')
+            )
+            p.save()
+            return jsonify({
+                'booking_id': b.id,
+                'payment_id': p.id,
+                'message': "Booking and payment successfully created"
+            }), 200
+        except: 
+            # Booking.get_or_none(Booking.id == b.id).delete_instance()
+            return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
 
 
 @bookings_api_blueprint.route('/', methods=["GET"])
@@ -64,13 +106,6 @@ def show():
         'message': "Wrong argument input"
     }), 418  # teapot error
 
-    # # GET THE BOOKING BASED ON ID
-    # show            / <id >
-
-    # # GET BOOKING BASED ON USER ID
-    # show         bookings?user_id = <id>
-    #    /user/<id >
-
 
 @bookings_api_blueprint.route('/<b_id>/update/', methods=["GET"])
 def update(b_id):
@@ -94,3 +129,11 @@ def update(b_id):
         return jsonify({
             "message": 'No booking id'
         })
+
+        
+@bookings_api_blueprint.route('/<id>', methods=["POST"])
+def delete(id):
+    Booking.get_or_none(Booking.id == id).delete_instance()
+    return jsonify({
+        'message': "Booking deleted"
+    }), 200

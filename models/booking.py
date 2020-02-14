@@ -14,6 +14,7 @@ class Booking(BaseModel):
         CHECKED_IN = 2
         COMPLETE = 3
 
+    # DEFAULTS unique=False, null=False
     user = pw.ForeignKeyField(User, backref='bookings')
     store = pw.ForeignKeyField(Store, backref='bookings')
     check_in_date_time = pw.DateTimeField()
@@ -21,7 +22,6 @@ class Booking(BaseModel):
     number_of_bag = pw.IntegerField()
     price = pw.IntegerField()
     status = pw.IntegerField(default=BookingType.CONFIRMED.value)
-    # payment = pw.ForeignKeyField(User, backref='payments')
 
     def validate(self):
         pass
