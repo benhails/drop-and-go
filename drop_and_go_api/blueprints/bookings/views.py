@@ -4,6 +4,7 @@ from models.user import User
 from models.booking import Booking
 from models.payment import Payment
 from playhouse.shortcuts import model_to_dict
+from app import gateway
 
 bookings_api_blueprint = Blueprint('bookings_api',
                                    __name__,
@@ -54,13 +55,13 @@ def create_inc_payment():
             }), 400
 
     else:
-        amount = request.json.get('amount')
+        trans_amount = request.json.get('amount')
         nonce = request.json.get('nonce')
         result = gateway.transaction.sale({
-            "amount": amount,
+            "amount": trans_amount,
             "payment_method_nonce": nonce,
             "options": {
-                "submit_for_settlement": True
+            "submit_for_settlement": True
             } 
         })
         if result.is_success:
@@ -70,7 +71,7 @@ def create_inc_payment():
                     booking = b.id,
                     trans_id = result.transaction.id,
                     currency = request.json.get('currency'),
-                    amount = amount
+                    amount = trans_amount
                 )
                 p.save()
                 return jsonify({
@@ -83,7 +84,7 @@ def create_inc_payment():
                 return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
         else:
             return jsonify({
-                'message': "The payment to Braintree failed"
+                'message': f"The payment to Braintree failed with result:{result} - please delete booking with id:{b.id} manually"
             })
 
 

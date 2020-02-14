@@ -12,7 +12,7 @@ payments_api_blueprint = Blueprint('payments_api',
 
 
 @payments_api_blueprint.route('/new', methods=["GET"])
-def index():
+def new():
     client_token = gateway.client_token.generate()
     return jsonify(client_token=client_token)
 
