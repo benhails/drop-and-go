@@ -54,23 +54,37 @@ def create_inc_payment():
             }), 400
 
     else:
-        try:
-            p = Payment(
-                user = user_id,
-                booking = b.id,
-                trans_id = request.json.get('trans_id'),
-                currency = request.json.get('currency'),
-                amount = request.json.get('amount')
-            )
-            p.save()
+        amount = request.json.get('amount')
+        nonce = request.json.get('nonce')
+        result = gateway.transaction.sale({
+            "amount": amount,
+            "payment_method_nonce": nonce,
+            "options": {
+                "submit_for_settlement": True
+            } 
+        })
+        if result.is_success:
+            try:
+                p = Payment(
+                    user = user_id,
+                    booking = b.id,
+                    trans_id = result.transaction.id,
+                    currency = request.json.get('currency'),
+                    amount = amount
+                )
+                p.save()
+                return jsonify({
+                    'booking_id': b.id,
+                    'payment_id': p.id,
+                    'message': "Booking and payment successfully created and payment sent to Braintree for settlement"
+                }), 200
+            except: 
+                # Booking.get_or_none(Booking.id == b.id).delete_instance()
+                return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
+        else:
             return jsonify({
-                'booking_id': b.id,
-                'payment_id': p.id,
-                'message': "Booking and payment successfully created"
-            }), 200
-        except: 
-            # Booking.get_or_none(Booking.id == b.id).delete_instance()
-            return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
+                'message': "The payment to Braintree failed"
+            })
 
 
 @bookings_api_blueprint.route('/', methods=["GET"])
