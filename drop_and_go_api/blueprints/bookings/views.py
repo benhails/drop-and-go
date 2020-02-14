@@ -38,14 +38,15 @@ def create_inc_payment():
     # CREATE BOOKING & PAYMENT SIMULTANEOUSLY
     try:
         user_id = request.json.get('user')
+        amount = request.json.get('price')
+        # TO INCLUDE OPTIONAL ITEMS SUCH AS STATUS BELOW THEN WE WOULD NEED TO CONSTRUCT A DICTIONARY AND EXCLUDE COMPLETELY WHEN NOT PRESENT
         b = Booking(
             user=user_id,
             store=request.json.get('store'),
             check_in_date_time=request.json.get('check_in_date_time'),
             check_out_date_time=request.json.get('check_out_date_time'),
             number_of_bag=request.json.get('number_of_bag'),
-            price=request.json.get('price'),
-            status=request.json.get('status')
+            price=amount
         )
         b.save()
 
@@ -55,10 +56,9 @@ def create_inc_payment():
             }), 400
 
     else:
-        trans_amount = request.json.get('amount')
         nonce = request.json.get('nonce')
         result = gateway.transaction.sale({
-            "amount": trans_amount,
+            "amount": amount,
             "payment_method_nonce": nonce,
             "options": {
             "submit_for_settlement": True
@@ -70,8 +70,7 @@ def create_inc_payment():
                     user = user_id,
                     booking = b.id,
                     trans_id = result.transaction.id,
-                    currency = request.json.get('currency'),
-                    amount = trans_amount
+                    amount = amount
                 )
                 p.save()
                 return jsonify({
