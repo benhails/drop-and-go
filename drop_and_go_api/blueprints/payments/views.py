@@ -4,10 +4,17 @@ from models.user import User
 from models.store import Store
 from models.booking import Booking
 from models.payment import Payment
+from app import gateway
 
 payments_api_blueprint = Blueprint('payments_api',
                                    __name__,
                                    template_folder='templates')
+
+
+@payments_api_blueprint.route('/new', methods=["GET"])
+def new():
+    client_token = gateway.client_token.generate()
+    return jsonify(client_token=client_token)
 
 
 @payments_api_blueprint.route('/', methods=["POST"])
