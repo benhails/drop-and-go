@@ -12,7 +12,6 @@ payments_api_blueprint = Blueprint('payments_api',
 
 @payments_api_blueprint.route('/', methods=["POST"])
 def create():
-    # CREATE PAYMENT
     p = Payment(
         user = request.json.get('user'),
         booking = request.json.get('booking'),

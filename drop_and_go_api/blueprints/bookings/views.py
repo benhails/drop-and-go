@@ -32,6 +32,47 @@ def create():
         return jsonify(b.errors), 400  # bad request
 
 
+@bookings_api_blueprint.route('/inc_payment', methods=["POST"])
+def create_inc_payment():
+    # CREATE BOOKING & PAYMENT SIMULTANEOUSLY
+    try:
+        user_id = request.json.get('user')
+        b = Booking(
+            user=user_id,
+            store=request.json.get('store'),
+            check_in_date_time=request.json.get('check_in_date_time'),
+            check_out_date_time=request.json.get('check_out_date_time'),
+            number_of_bag=request.json.get('number_of_bag'),
+            price=request.json.get('price'),
+            status=request.json.get('status')
+        )
+        b.save()
+
+    except:
+        return jsonify({
+                'message': "There was an error when trying to create the booking"
+            }), 400
+
+    else:
+        try:
+            p = Payment(
+                user = user_id,
+                booking = b.id,
+                trans_id = request.json.get('trans_id'),
+                currency = request.json.get('currency'),
+                amount = request.json.get('amount')
+            )
+            p.save()
+            return jsonify({
+                'booking_id': b.id,
+                'payment_id': p.id,
+                'message': "Booking and payment successfully created"
+            }), 200
+        except: 
+            # Booking.get_or_none(Booking.id == b.id).delete_instance()
+            return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
+
+
 @bookings_api_blueprint.route('/', methods=["GET"])
 def show():
 
@@ -90,10 +131,9 @@ def update(b_id):
         })
 
         
-@bookings_api_blueprint.route('/<id>', methods=["GET"])
+@bookings_api_blueprint.route('/<id>', methods=["POST"])
 def delete(id):
-    # work in progress; need to check and ensure this works
-    Booking.get_or_none(Booking.id == id).deleteinstance()
+    Booking.get_or_none(Booking.id == id).delete_instance()
     return jsonify({
         'message': "Booking deleted"
     }), 200

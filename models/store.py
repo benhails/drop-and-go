@@ -21,7 +21,7 @@ class Store(BaseModel):
     nearby2 = pw.CharField(null=True, default='')
     opening_hours = pw.CharField(null=True, default='')
     store_image = pw.CharField(null=True, 
-        default='https://lh3.googleusercontent.com/proxy/NjslLpx0TARRoIGk9d47DNO-jCpvf_puajCcY6pxgq2tnc0xNA-VtikFEytFbDwxqa1Yur_8oRi6oSZ0-HpY8NvOVCf6kIJg9-1VGO3tftiqUyZKeztX29eVw9y3c9SGFx0')
+        default='http://nextagram-syafiq.s3.amazonaws.com/store_default.png')
     owner = pw.ForeignKeyField(User, backref='stores')
     price = pw.IntegerField(null=True, default=0)
     star_rating = pw.IntegerField(null=True, default=5)
