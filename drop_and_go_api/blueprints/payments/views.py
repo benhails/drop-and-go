@@ -13,7 +13,8 @@ payments_api_blueprint = Blueprint('payments_api',
 
 @payments_api_blueprint.route('/new', methods=["GET"])
 def new():
-    client_token = gateway.client_token.generate()
+    # client_token = gateway.client_token.generate()
+    client_token = gateway.client_token.generate({"customer_id":1}) # temp line to provide saved credit card details on front end; could make dynamic in future
     return jsonify(client_token=client_token)
 
 
