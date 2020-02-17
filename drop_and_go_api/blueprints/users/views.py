@@ -19,6 +19,7 @@ def create():
     )
     if u.save():
         return jsonify({
+            'is_success': True,
             'id': u.id,
             'message': "User successfully created"
         }), 200
@@ -32,6 +33,7 @@ def show(id):
     u = User.get_or_none(User.id == id)
     if u:
         return jsonify({
+            'is_success': True,
             'id': u.id,
             'name': u.name,
             'email': u.email,
@@ -41,5 +43,6 @@ def show(id):
         }), 200
     else:
         return jsonify({
+            'is_success': False,
             'message': "User doesn't exist"
         }), 418 # teapot error

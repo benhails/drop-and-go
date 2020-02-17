@@ -25,6 +25,7 @@ def create():
     )
     if b.save():
         return jsonify({
+            'is_success': True,
             'id': b.id,
             'message': "User successfully booked"
         }), 200
@@ -52,6 +53,7 @@ def create_inc_payment():
 
     except:
         return jsonify({
+                'is_success': False,
                 'message': "There was an error when trying to create the booking"
             }), 400
 
@@ -74,6 +76,7 @@ def create_inc_payment():
                 )
                 p.save()
                 return jsonify({
+                    'is_success': True,
                     'booking_id': b.id,
                     'payment_id': p.id,
                     'message': "Booking and payment successfully created and payment sent to Braintree for settlement"
@@ -83,6 +86,7 @@ def create_inc_payment():
                 return f'Please delete the booking with id:{b.id} manually!', 400  # bad request
         else:
             return jsonify({
+                'is_success': False,
                 'message': f"The payment to Braintree failed with result:{result} - please delete booking with id:{b.id} manually"
             })
 
@@ -94,7 +98,7 @@ def show():
     booking_id_args = request.args.get('book_id')
 
     if user_id_args:
-        bookings = Booking.select().where(Booking.user_id == user_id_args)
+        bookings = Booking.select().where(Booking.user_id == user_id_args).order_by(-Booking.status, Booking.check_in_date_time)
         if bookings:
             booking_list = []
             for booking in bookings:
@@ -102,7 +106,8 @@ def show():
             return jsonify(booking_list)
         else:
             return jsonify({
-                'message': "User doesn't exist"
+                'is_success': False,
+                'message': "User doesn't exist or doesn't have any bookings"
             }), 418  # teapot error
 
     elif booking_id_args:
@@ -114,9 +119,11 @@ def show():
             return jsonify(booking_list)
         else:
             return jsonify({
+                'is_success': False,
                 'message': "Booking doesn't exist"
             }), 418  # teapot error
     return jsonify({
+        'is_success': False,
         'message': "Wrong argument input"
     }), 418  # teapot error
 
@@ -132,15 +139,18 @@ def update(b_id):
             Booking.update(status=status_args).where(
                 Booking.id == b).execute()
             return jsonify({
+                'is_success': True,
                 'message': 'Status has successfully updated'
             })
         else:
             return jsonify({
+                'is_success': False,
                 'message': "Wrong argument input for status"
             }), 418  # teapot error
 
     else:
         return jsonify({
+            'is_success': False,
             "message": 'No booking id'
         })
 
@@ -149,5 +159,6 @@ def update(b_id):
 def delete(id):
     Booking.get_or_none(Booking.id == id).delete_instance()
     return jsonify({
+        'is_success': True,
         'message': "Booking deleted"
     }), 200

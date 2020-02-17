@@ -29,6 +29,7 @@ def create():
     )
     if s.save():
         return jsonify({
+            'is_success': True,
             'id': s.id,
             'message': "Store successfully created"
         }), 200
@@ -43,6 +44,7 @@ def show(id):
     s = Store.get_or_none(Store.id == id)
     if s:
         return jsonify({
+            'is_success': True,
             'name': s.name,
             'building_number': s.building_number,
             'street_name': s.street_name,
@@ -62,6 +64,7 @@ def show(id):
         }), 200
     else:
         return jsonify({
+            'is_success': False,
             'message': "Stores doesn't exist"
         }), 418  # teapot error
 
@@ -102,9 +105,11 @@ def loc_show():
 
         else:
             return jsonify({
+                'is_success': False,
                 'message': "Store doesn't exist"
             }), 418  # teapot error
     else:
         return jsonify({
+            'is_success': False,
             'message': "Wrong argument input"
         }), 418  # teapot error
